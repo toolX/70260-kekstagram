@@ -125,6 +125,23 @@
       // 0 0 находится в левом верхнем углу холста, в противном случае
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
+      this._ctx.fillStyle = 'green';
+      this._ctx.setLineDash([0, 0]);
+      this._ctx.beginPath();
+      this._ctx.moveTo(displX, displY);
+      this._ctx.lineTo((displX + this._container.width), displY);
+      this._ctx.lineTo((displX + this._container.width), displY + 35);
+      this._ctx.lineTo(displX, displY + 35);
+      this._ctx.lineTo(displX, displY);
+      this._ctx.fill();
+      this._ctx.fillStyle = 'blue';
+      this._ctx.beginPath();
+      this._ctx.moveTo((displX + this._container.width), displY + 35);
+      this._ctx.lineTo((displX + this._container.width), (displY + this._container.height));
+      this._ctx.lineTo((displX + this._container.width - 110), (displY + this._container.height));
+      this._ctx.lineTo((displX + this._container.width - 110), (displY + 35));
+      this._ctx.lineTo((displX + this._container.width), displY + 35);
+      this._ctx.fill();
       this._ctx.restore();
     },
 
