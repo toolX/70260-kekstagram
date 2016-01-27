@@ -125,6 +125,31 @@
       // 0 0 находится в левом верхнем углу холста, в противном случае
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
+      this._ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      this._ctx.fillRect(
+        0,
+        0,
+        ((this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2) - 7.65,
+        this._container.height);
+      this._ctx.fillRect(
+        this._container.width - (this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2,
+        0,
+        ((this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2),
+        this._container.height);
+      this._ctx.fillRect(
+        ((this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2) - 8,
+        0,
+        (this._resizeConstraint.side - this._ctx.lineWidth / 2) + 8.3,
+        ((this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2) - 8);
+      this._ctx.fillRect(
+        ((this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2) - 8,
+        this._container.height - (this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2,
+        (this._resizeConstraint.side - this._ctx.lineWidth / 2) + 8.3,
+        ((this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2));
+      this._ctx.font = '16px serif';
+      this._ctx.fillStyle = 'white';
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalWidth, ((this._container.width / 2) - 30), 25);
       this._ctx.restore();
     },
 
