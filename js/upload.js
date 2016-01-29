@@ -72,10 +72,9 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    var form = document.forms['upload-resize'];
-    var resizeX = +form.elements.x.value;
-    var resizeY = +form.elements.y.value;
-    var size = +form.elements.size.value;
+    var resizeX = +resizeForm.x.value;
+    var resizeY = +resizeForm.y.value;
+    var size = +resizeForm.size.value;
     if ((resizeX + size) > currentResizer._image.naturalWidth) {
       return false;
     } else if ((resizeY + size) > currentResizer._image.naturalHeight) {
@@ -207,15 +206,13 @@
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    var btn = document.forms[2].fwd;
-
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     } else {
-      btn.classList.add('disabled');
+      resizeForm.fwd.classList.add('disabled');
     }
   };
 
