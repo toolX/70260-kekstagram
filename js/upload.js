@@ -241,7 +241,7 @@
       if (elems[i].checked) {
         var myBirthday = new Date('2015-05-15');
         var firstDateFormatted = Math.floor((+Date.now() - myBirthday) / 24 / 60 / 60 / 1000);
-        var dateToExpire = +Date.now() + firstDateFormatted * 24 * 60 * 60 * 1000;
+        var dateToExpire = Date.now() + firstDateFormatted * 24 * 60 * 60 * 1000;
         var formattedDateToExpire = new Date(dateToExpire).toUTCString();
         document.cookie = 'lastFilter=' + elems[i].value + ';expires=' + formattedDateToExpire;
       }
