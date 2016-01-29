@@ -149,7 +149,7 @@
         ((this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2));
       this._ctx.font = '16px serif';
       this._ctx.fillStyle = 'white';
-      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalWidth, ((this._container.width / 2) - 30), 25);
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight, ((this._container.width / 2) - 30), 25);
       this._ctx.restore();
     },
 

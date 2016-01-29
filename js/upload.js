@@ -72,6 +72,18 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
+    var resizeX = +resizeForm.x.value;
+    var resizeY = +resizeForm.y.value;
+    var size = +resizeForm.size.value;
+    if ((resizeX + size) > currentResizer._image.naturalWidth) {
+      return false;
+    } else if ((resizeY + size) > currentResizer._image.naturalHeight) {
+      return false;
+    } else if (resizeX < 0) {
+      return false;
+    } else if (resizeY < 0) {
+      return false;
+    }
     return true;
   }
 
@@ -199,6 +211,8 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+    } else {
+      resizeForm.fwd.classList.add('disabled');
     }
   };
 
