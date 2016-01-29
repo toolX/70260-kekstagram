@@ -235,6 +235,18 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    var fieldset = filterForm.querySelector('.upload-filter-controls');
+    var elems = fieldset.getElementsByTagName('input');
+    for (var i = 0; i < elems.length; i++) {
+      if (elems[i].checked) {
+        var myBirthday = new Date('2015-05-15');
+        var firstDateFormatted = Math.floor((+Date.now() - myBirthday) / 24 / 60 / 60 / 1000);
+        var dateToExpire = +Date.now() + firstDateFormatted * 24 * 60 * 60 * 1000;
+        var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+        document.cookie = 'lastFilter=' + elems[i].value + ';expires=' + formattedDateToExpire;
+      }
+    }
+
     cleanupResizer();
     updateBackground();
 
@@ -265,7 +277,7 @@
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
-    filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+    filterImage.className = docCookies.getItem('lastFilter');
   };
 
   cleanupResizer();
