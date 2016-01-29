@@ -72,6 +72,22 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
+    var form = document.forms['upload-resize'];
+    var resizeX = form.elements.x;
+    var resizeY = form.elements.y;
+    var size = form.elements.size;
+    if ((resizeX.value + size.value) > currentResizer._image.naturalWidth) {
+      return false;
+    }
+    else if ((resizeY.value + size.value) > currentResizer._image.naturalHeight) {
+      return false;
+    }
+    else if (resizeX.value < 0) {
+      return false;
+    }
+    else if (resizeY.value < 0) {
+      return false;
+    }
     return true;
   }
 
@@ -194,11 +210,16 @@
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    var btn = document.forms[1].fwd;
+
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+    }
+    else {
+      btn.classList.add('disabled');
     }
   };
 
