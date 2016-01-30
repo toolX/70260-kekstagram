@@ -254,6 +254,15 @@
     uploadForm.classList.remove('invisible');
   };
 
+  /* global docCookies: true */
+  var fieldset = filterForm.querySelector('.upload-filter-controls');
+  var elems = fieldset.getElementsByTagName('input');
+  for (var i = 0; i < elems.length; i++) {
+    if (elems[i].value === docCookies.getItem('lastFilter')) {
+      elems[i].checked = true;
+      filterImage.className = 'filter-image-preview ' + 'filter-' + docCookies.getItem('lastFilter');
+    }
+  }
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
@@ -277,7 +286,7 @@
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
-    filterImage.className = docCookies.getItem('lastFilter');
+    filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   };
 
   cleanupResizer();
