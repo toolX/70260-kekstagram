@@ -235,12 +235,13 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    var fieldset = filterForm.querySelector('.upload-filter-controls');
-    var elems = fieldset.getElementsByTagName('input');
+    var elems = filterForm['upload-filter'];
     for (var i = 0; i < elems.length; i++) {
       if (elems[i].checked) {
-        var myBirthday = new Date('2015-05-15');
-        var firstDateFormatted = Math.floor((+Date.now() - myBirthday) / 24 / 60 / 60 / 1000);
+        var date = new Date();
+        var year = date.getFullYear() - 1;
+        var myBirthday = new Date(year + '-05-15');
+        var firstDateFormatted = Math.floor((Date.now() - myBirthday) / 24 / 60 / 60 / 1000);
         var dateToExpire = Date.now() + firstDateFormatted * 24 * 60 * 60 * 1000;
         var formattedDateToExpire = new Date(dateToExpire).toUTCString();
         document.cookie = 'lastFilter=' + elems[i].value + ';expires=' + formattedDateToExpire;
@@ -255,8 +256,7 @@
   };
 
   /* global docCookies: true */
-  var fieldset = filterForm.querySelector('.upload-filter-controls');
-  var elems = fieldset.getElementsByTagName('input');
+  var elems = filterForm['upload-filter'];
   for (var i = 0; i < elems.length; i++) {
     if (elems[i].value === docCookies.getItem('lastFilter')) {
       elems[i].checked = true;
