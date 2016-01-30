@@ -235,6 +235,19 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    var elems = filterForm['upload-filter'];
+    for (var i = 0; i < elems.length; i++) {
+      if (elems[i].checked) {
+        var date = new Date();
+        var year = date.getFullYear() - 1;
+        var myBirthday = new Date(year + '-05-15');
+        var firstDateFormatted = Math.floor((Date.now() - myBirthday) / 24 / 60 / 60 / 1000);
+        var dateToExpire = Date.now() + firstDateFormatted * 24 * 60 * 60 * 1000;
+        var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+        document.cookie = 'lastFilter=' + elems[i].value + ';expires=' + formattedDateToExpire;
+      }
+    }
+
     cleanupResizer();
     updateBackground();
 
@@ -242,6 +255,14 @@
     uploadForm.classList.remove('invisible');
   };
 
+  /* global docCookies: true */
+  var elems = filterForm['upload-filter'];
+  for (var i = 0; i < elems.length; i++) {
+    if (elems[i].value === docCookies.getItem('lastFilter')) {
+      elems[i].checked = true;
+      filterImage.className = 'filter-image-preview ' + 'filter-' + docCookies.getItem('lastFilter');
+    }
+  }
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
