@@ -6,10 +6,28 @@
 
   var container = document.querySelector('.pictures');
   var template = document.querySelector('#picture-template');
-  pictures.forEach(function(picture) {
-    var element = getElementFromTemplate(picture);
-    container.appendChild(element);
-  });
+
+  getPictures();
+
+  function renderPictures(pictures) {
+    pictures.forEach(function(picture) {
+      var element = getElementFromTemplate(picture);
+      container.appendChild(element);
+    });
+  }
+
+  function getPictures() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
+    xhr.onload = function(event) {
+      var rawData = event.target.response;
+      var loadedPictures = JSON.parse(rawData);
+
+      renderPictures(loadedPictures);
+    };
+
+    xhr.send();
+  }
 
   function getElementFromTemplate(data) {
     if ('content' in template) {
