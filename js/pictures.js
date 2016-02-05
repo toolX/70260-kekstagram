@@ -61,21 +61,7 @@
     container.classList.add('pictures-loading');
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
-    /*xhr.addEventListener('readystatechange', function() {
-      switch(xhr.readyState) {
-        case 1:
-        case 2:
-        case 3:
-          container.classList.add('pictures-loading');
-          break;
-        case 4:
-          container.classList.remove('pictures-loading');
-      }
-    });*/
-    xhr.onerror = function() {
-      container.classList.add('pictures-failure');
-    };
-    xhr.ontimeout = function() {
+    xhr.onerror = xhr.ontimeout = function() {
       container.classList.add('pictures-failure');
     };
     xhr.onload = function(event) {
@@ -91,10 +77,11 @@
   }
 
   function getElementFromTemplate(data) {
+    var element;
     if ('content' in template) {
-      var element = template.content.childNodes[0].cloneNode(true);
+      element = template.content.childNodes[0].cloneNode(true);
     } else {
-      var element = template.children[0].cloneNode(true);
+      element = template.children[0].cloneNode(true);
     }
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
