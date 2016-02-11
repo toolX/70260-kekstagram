@@ -55,7 +55,6 @@
   }
 
   function setActiveFilter(id) {
-    //filteredPictures = pictures.slice(0); -- перенес в scroll
 
     switch (id) {
       case 'filter-popular':
@@ -85,7 +84,7 @@
   function getPictures() {
     container.classList.add('pictures-loading');
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
+    xhr.open('GET', 'https://o0.github.io/assets/json/pictures.json');
     xhr.onerror = xhr.ontimeout = function() {
       container.classList.add('pictures-failure');
     };
