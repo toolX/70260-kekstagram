@@ -3,6 +3,7 @@
 (function() {
   var pictures = [];
   var filteredPictures = [];
+  var activeFilter = 'filter-popular';
   var currentPage = 0;
   var PAGE_SIZE = 12;
 
@@ -95,6 +96,7 @@
       pictures = loadedPictures;
 
       renderPictures(loadedPictures, 0);
+      setActiveFilter(activeFilter);
     };
 
     xhr.send();
