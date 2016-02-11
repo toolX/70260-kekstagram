@@ -2,27 +2,51 @@
 
 (function() {
   var pictures = [];
+  var filteredPictures = [];
+  var currentPage = 0;
+  var PAGE_SIZE = 12;
 
   var filters = document.querySelector('.filters');
   filters.classList.remove('hidden');
-  var pictureFilters = filters.querySelectorAll('input');
-  for (var i = 0; i < pictureFilters.length; i++) {
-    pictureFilters[i].onclick = function(event) {
-      var checkedElementID = event.target.id;
-      setActiveFilter(checkedElementID);
-    };
-  }
+  filters.addEventListener('click', function(event) {
+    var checkedElementID = event.target;
+    if (checkedElementID.classList.contains('filters-radio')) {
+      setActiveFilter(checkedElementID.id);
+    }
+  });
 
   var container = document.querySelector('.pictures');
   var template = document.querySelector('#picture-template');
 
+  var scrollTimeout;
+
+  window.addEventListener('scroll', function(event) {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      filteredPictures = pictures.slice(0);
+      var divPicturesCoordinates = container.getBoundingClientRect();
+      var viewportSize = window.innerHeight;
+      if (divPicturesCoordinates.bottom - viewportSize <= 0) {
+        if (currentPage < Math.ceil(filteredPictures.length / PAGE_SIZE)) {
+          renderPictures(filteredPictures, ++currentPage);
+        }
+      }
+    }, 100);
+  });
+
   getPictures();
 
-  function renderPictures(picturesToRender) {
-    container.innerHTML = '';
+  function renderPictures(picturesToRender, pageNumber, replace) {
+    if (replace) {
+      container.innerHTML = '';
+    }
     var fragment = document.createDocumentFragment();
 
-    picturesToRender.forEach(function(picture) {
+    var from = pageNumber * PAGE_SIZE;
+    var to = from + PAGE_SIZE;
+    var pagePictures = picturesToRender.slice(from, to);
+
+    pagePictures.forEach(function(picture) {
       var element = getElementFromTemplate(picture);
       fragment.appendChild(element);
     });
@@ -31,7 +55,7 @@
   }
 
   function setActiveFilter(id) {
-    var filteredPictures = pictures.slice(0);
+    //filteredPictures = pictures.slice(0); -- перенес в scroll
 
     switch (id) {
       case 'filter-popular':
@@ -54,13 +78,14 @@
         });
         break;
     }
-    renderPictures(filteredPictures);
+    renderPictures(filteredPictures, 0, true);
+    currentPage = 0;
   }
 
   function getPictures() {
     container.classList.add('pictures-loading');
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://o0.github.io/assets/json/pictures.json');
+    xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
     xhr.onerror = xhr.ontimeout = function() {
       container.classList.add('pictures-failure');
     };
@@ -70,7 +95,7 @@
       var loadedPictures = JSON.parse(rawData);
       pictures = loadedPictures;
 
-      renderPictures(loadedPictures);
+      renderPictures(loadedPictures, 0);
     };
 
     xhr.send();
