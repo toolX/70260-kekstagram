@@ -20,10 +20,9 @@
 
   var scrollTimeout;
 
-  window.addEventListener('scroll', function(event) {
+  window.addEventListener('scroll', function() {
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(function() {
-      filteredPictures = pictures.slice(0);
       var divPicturesCoordinates = container.getBoundingClientRect();
       var viewportSize = window.innerHeight;
       if (divPicturesCoordinates.bottom - viewportSize <= 0) {
@@ -55,6 +54,7 @@
   }
 
   function setActiveFilter(id) {
+    filteredPictures = pictures.slice(0);
 
     switch (id) {
       case 'filter-popular':
