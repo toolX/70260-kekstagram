@@ -151,7 +151,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  function uploadFormOnchange(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -172,8 +172,14 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
+          currentResizer._image.addEventListener('load', resizerLoad);
+          function resizerLoad() {
+            var x = currentResizer.getConstraint().x;
+            var y = currentResizer.getConstraint().y;
+            var side = currentResizer.getConstraint().side;
+            currentResizer.setConstraint(x, y, side);
+          }
         };
-
         fileReader.readAsDataURL(element.files[0]);
       } else {
         // Показ сообщения об ошибке, если загружаемый файл, не является
@@ -181,14 +187,37 @@
         showMessage(Action.ERROR);
       }
     }
-  };
+  }
+  uploadForm.addEventListener('change', uploadFormOnchange);
+  function resizerChange() {
+    var inputX = resizeForm.elements.x;
+    var inputY = resizeForm.elements.y;
+    var inputSize = resizeForm.elements.size;
+    var x = currentResizer.getConstraint().x;
+    var y = currentResizer.getConstraint().y;
+    var side = currentResizer.getConstraint().side;
+    inputX.value = x;
+    inputY.value = y;
+    inputSize.value = side;
+  }
+  window.addEventListener('resizerchange', resizerChange);
+
+  var inputX = resizeForm.elements.x;
+  var inputY = resizeForm.elements.y;
+  var inputSize = resizeForm.elements.size;
+  inputX.addEventListener('input', resizerCoordinatesChange);
+  inputY.addEventListener('input', resizerCoordinatesChange);
+  inputSize.addEventListener('input', resizerCoordinatesChange);
+  function resizerCoordinatesChange() {
+    currentResizer.setConstraint(+inputX.value, +inputY.value, +inputSize.value);
+  }
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  function resizeFormOnreset(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -196,14 +225,15 @@
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  }
+  resizeForm.addEventListener('reset', resizeFormOnreset);
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  function resizeFormOnsubmit(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -214,25 +244,27 @@
     } else {
       resizeForm.fwd.classList.add('disabled');
     }
-  };
+  }
+  resizeForm.addEventListener('submit', resizeFormOnsubmit);
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  function filterFormOnreset(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  }
+  filterForm.addEventListener('reset', filterFormOnreset);
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  function filterFormOnsubmit(evt) {
     evt.preventDefault();
 
     var elems = filterForm['upload-filter'];
@@ -253,7 +285,8 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  }
+  filterForm.addEventListener('submit', filterFormOnsubmit);
 
   /* global docCookies: true */
   var elems = filterForm['upload-filter'];
@@ -267,7 +300,7 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  function filterFormOnchange() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -287,7 +320,8 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  }
+  filterForm.addEventListener('change', filterFormOnchange);
 
   cleanupResizer();
   updateBackground();
