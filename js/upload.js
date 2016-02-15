@@ -195,7 +195,6 @@
     var inputX = document.getElementById('resize-x');
     var inputY = document.getElementById('resize-y');
     var inputSize = document.getElementById('resize-size');
-    currentResizer.getConstraint();
     var x = currentResizer._resizeConstraint.x;
     var y = currentResizer._resizeConstraint.y;
     var side = currentResizer._resizeConstraint.side;
@@ -205,12 +204,28 @@
   }
   window.addEventListener('resizerchange', resizerChange);
 
+  var inputX = document.getElementById('resize-x');
+  inputX.addEventListener('input', resizerXChange);
+  function resizerXChange() {
+    var y = currentResizer._resizeConstraint.y;
+    var side = currentResizer._resizeConstraint.side;
+    currentResizer.setConstraint(+inputX.value, y, side);
+  }
+
+  var inputY = document.getElementById('resize-y');
+  inputY.addEventListener('input', resizerYChange);
+  function resizerYChange() {
+    var x = currentResizer._resizeConstraint.x;
+    var side = currentResizer._resizeConstraint.side;
+    currentResizer.setConstraint(x, +inputY.value, side);
+  }
+
   var inputSize = document.getElementById('resize-size');
   inputSize.addEventListener('input', resizerSideChange);
   function resizerSideChange() {
-    var x;
-    var y;
-    currentResizer.setConstraint(x, y, inputSize.value);
+    var x = currentResizer._resizeConstraint.x;
+    var y = currentResizer._resizeConstraint.y;
+    currentResizer.setConstraint(x, y, +inputSize.value);
   }
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
