@@ -174,9 +174,6 @@
           hideMessage();
           currentResizer._image.addEventListener('load', resizerLoad);
           function resizerLoad() {
-            //var inputX = document.getElementById('resize-x');
-            //var inputY = document.getElementById('resize-y');
-            //var inputSize = document.getElementById('resize-size');
             currentResizer.getConstraint();
             var x = currentResizer._resizeConstraint.x;
             var y = currentResizer._resizeConstraint.y;
@@ -211,7 +208,9 @@
   var inputSize = document.getElementById('resize-size');
   inputSize.addEventListener('input', resizerSideChange);
   function resizerSideChange() {
-    currentResizer.moveConstraint(0, 0, 1);
+    var x = currentResizer._resizeConstraint.x;
+    var y = currentResizer._resizeConstraint.y;
+    currentResizer.setConstraint(x, y, inputSize.value);
   }
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
