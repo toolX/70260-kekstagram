@@ -208,8 +208,8 @@
   var inputSize = document.getElementById('resize-size');
   inputSize.addEventListener('input', resizerSideChange);
   function resizerSideChange() {
-    var x = currentResizer._resizeConstraint.x;
-    var y = currentResizer._resizeConstraint.y;
+    var x;
+    var y;
     currentResizer.setConstraint(x, y, inputSize.value);
   }
   /**
