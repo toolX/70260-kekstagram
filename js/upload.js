@@ -172,19 +172,18 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-          window.addEventListener('resizerchange', function() {
-            var inputX = document.getElementById('resize-x');
-            var inputY = document.getElementById('resize-y');
-            var inputSize = document.getElementById('resize-size');
+          currentResizer._image.addEventListener('load', resizerLoad);
+          function resizerLoad() {
+            //var inputX = document.getElementById('resize-x');
+            //var inputY = document.getElementById('resize-y');
+            //var inputSize = document.getElementById('resize-size');
             currentResizer.getConstraint();
             var x = currentResizer._resizeConstraint.x;
             var y = currentResizer._resizeConstraint.y;
             var side = currentResizer._resizeConstraint.side;
-            inputX.value = x;
-            inputY.value = y;
-            inputSize.value = side;
-            console.log(inputX.value, inputY.value, inputSize.value);
-          });
+            currentResizer.setConstraint(x, y, side);
+          }
+
         };
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -195,7 +194,25 @@
     }
   }
   uploadForm.addEventListener('change', uploadFormOnchange);
+  function resizerChange() {
+    var inputX = document.getElementById('resize-x');
+    var inputY = document.getElementById('resize-y');
+    var inputSize = document.getElementById('resize-size');
+    currentResizer.getConstraint();
+    var x = currentResizer._resizeConstraint.x;
+    var y = currentResizer._resizeConstraint.y;
+    var side = currentResizer._resizeConstraint.side;
+    inputX.value = x;
+    inputY.value = y;
+    inputSize.value = side;
+  }
+  window.addEventListener('resizerchange', resizerChange);
 
+  var inputSize = document.getElementById('resize-size');
+  inputSize.addEventListener('input', resizerSideChange);
+  function resizerSideChange() {
+    currentResizer.moveConstraint(0, 0, 1);
+  }
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
