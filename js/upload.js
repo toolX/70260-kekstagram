@@ -174,13 +174,11 @@
           hideMessage();
           currentResizer._image.addEventListener('load', resizerLoad);
           function resizerLoad() {
-            currentResizer.getConstraint();
-            var x = currentResizer._resizeConstraint.x;
-            var y = currentResizer._resizeConstraint.y;
-            var side = currentResizer._resizeConstraint.side;
+            var x = currentResizer.getConstraint().x;
+            var y = currentResizer.getConstraint().y;
+            var side = currentResizer.getConstraint().side;
             currentResizer.setConstraint(x, y, side);
           }
-
         };
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -192,41 +190,28 @@
   }
   uploadForm.addEventListener('change', uploadFormOnchange);
   function resizerChange() {
-    var inputX = document.getElementById('resize-x');
-    var inputY = document.getElementById('resize-y');
-    var inputSize = document.getElementById('resize-size');
-    var x = currentResizer._resizeConstraint.x;
-    var y = currentResizer._resizeConstraint.y;
-    var side = currentResizer._resizeConstraint.side;
+    var inputX = resizeForm.elements.x;
+    var inputY = resizeForm.elements.y;
+    var inputSize = resizeForm.elements.size;
+    var x = currentResizer.getConstraint().x;
+    var y = currentResizer.getConstraint().y;
+    var side = currentResizer.getConstraint().side;
     inputX.value = x;
     inputY.value = y;
     inputSize.value = side;
   }
   window.addEventListener('resizerchange', resizerChange);
 
-  var inputX = document.getElementById('resize-x');
-  inputX.addEventListener('input', resizerXChange);
-  function resizerXChange() {
-    var y = currentResizer._resizeConstraint.y;
-    var side = currentResizer._resizeConstraint.side;
-    currentResizer.setConstraint(+inputX.value, y, side);
+  var inputX = resizeForm.elements.x;
+  var inputY = resizeForm.elements.y;
+  var inputSize = resizeForm.elements.size;
+  inputX.addEventListener('input', resizerCoordinatesChange);
+  inputY.addEventListener('input', resizerCoordinatesChange);
+  inputSize.addEventListener('input', resizerCoordinatesChange);
+  function resizerCoordinatesChange() {
+    currentResizer.setConstraint(+inputX.value, +inputY.value, +inputSize.value);
   }
 
-  var inputY = document.getElementById('resize-y');
-  inputY.addEventListener('input', resizerYChange);
-  function resizerYChange() {
-    var x = currentResizer._resizeConstraint.x;
-    var side = currentResizer._resizeConstraint.side;
-    currentResizer.setConstraint(x, +inputY.value, side);
-  }
-
-  var inputSize = document.getElementById('resize-size');
-  inputSize.addEventListener('input', resizerSideChange);
-  function resizerSideChange() {
-    var x = currentResizer._resizeConstraint.x;
-    var y = currentResizer._resizeConstraint.y;
-    currentResizer.setConstraint(x, y, +inputSize.value);
-  }
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
