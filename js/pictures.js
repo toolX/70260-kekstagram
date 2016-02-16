@@ -43,7 +43,7 @@
 
       var renderedElements = document.querySelectorAll('.picture');
       Array.prototype.forEach.call(renderedElements, function(el) {
-        el.removeEventListener('click', gallery._onPhotoClick);
+        el.removeEventListener('click', _onClick);
         container.removeChild(el);
       });
     }
@@ -58,10 +58,15 @@
       photoElement.render();
       fragment.appendChild(photoElement.element);
 
-      photoElement.element.addEventListener('click', gallery._onPhotoClick);
+      photoElement.element.addEventListener('click', _onClick);
     });
 
     container.appendChild(fragment);
+  }
+
+  function _onClick(event) {
+    event.preventDefault();
+    gallery.show();
   }
 
   function setActiveFilter(id) {

@@ -33,8 +33,7 @@
   };
 
   Gallery.prototype._onPhotoClick = function(event) {
-    event.preventDefault();
-    this.show();
+
   };
 
   Gallery.prototype._onDocumentKeyDown = function(event) {
