@@ -32,7 +32,7 @@
     document.removeEventListener('keydown', this._onDocumentKeyDown);
   };
 
-  Gallery.prototype._onPhotoClick = function(event) {
+  Gallery.prototype._onPhotoClick = function() {
 
   };
 
