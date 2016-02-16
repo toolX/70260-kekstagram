@@ -46,7 +46,6 @@
         el.removeEventListener('click', gallery._onPhotoClick);
         container.removeChild(el);
       });
-      container.innerHTML = '';
     }
     var fragment = document.createDocumentFragment();
 
