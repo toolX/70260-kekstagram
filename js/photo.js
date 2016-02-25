@@ -7,6 +7,7 @@
    */
   function Photo(data) {
     this._data = data;
+    this._onClick = this._onClick.bind(this);
   }
 
   Photo.prototype.render = function() {
@@ -43,6 +44,24 @@
     }.bind(this), IMAGE_TIMEOUT);
 
     backgroundImage.src = this._data.url;
+
+    this.element.addEventListener('click', this._onClick);
+  };
+
+  Photo.prototype.remove = function() {
+    this.element.removeEventListener('click', this._onClick);
+  };
+
+  /**
+   * @type {?Function}
+   */
+  Photo.prototype._onClick = function(event) {
+    event.preventDefault();
+    if (!event.target.classList.contains('picture-load-failure')) {
+      if (typeof this.onClick === 'function') {
+        this.onClick();
+      }
+    }
   };
 
   window.Photo = Photo;
