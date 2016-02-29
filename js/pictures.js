@@ -5,6 +5,7 @@
 (function() {
   var pictures = [];
   var filteredPictures = [];
+  var renderedElements = [];
   var activeFilter = 'filter-popular';
   var currentPage = 0;
   var PAGE_SIZE = 12;
@@ -40,12 +41,14 @@
 
   function renderPictures(picturesToRender, pageNumber, replace) {
     if (replace) {
+      gallery._photoArray.length = [];
 
-      var renderedElements = document.querySelectorAll('.picture');
-      Array.prototype.forEach.call(renderedElements, function(el) {
-        el.removeEventListener('click', _onClick);
-        container.removeChild(el);
-      });
+      var el;
+      while ((el = renderedElements.shift())) {
+        container.removeChild(el.element);
+        el.onClick = null;
+        el.remove();
+      }
     }
     var fragment = document.createDocumentFragment();
 
@@ -53,20 +56,22 @@
     var to = from + PAGE_SIZE;
     var pagePictures = picturesToRender.slice(from, to);
 
-    pagePictures.forEach(function(photo) {
+    renderedElements = renderedElements.concat(pagePictures.map(function(photo) {
       var photoElement = new Photo(photo);
       photoElement.render();
       fragment.appendChild(photoElement.element);
 
-      photoElement.element.addEventListener('click', _onClick);
-    });
+      photoElement.onClick = function() {
+        gallery.data = photoElement._data;
+        gallery.setCurrentPicture(renderedElements.indexOf(photoElement));
+        gallery.show();
+      };
+
+      return photoElement;
+    }));
+    gallery.setPictures(filteredPictures);
 
     container.appendChild(fragment);
-  }
-
-  function _onClick(event) {
-    event.preventDefault();
-    gallery.show();
   }
 
   function setActiveFilter(id) {
@@ -109,8 +114,9 @@
       var rawData = event.target.response;
       var loadedPictures = JSON.parse(rawData);
       pictures = loadedPictures;
+      gallery.setPictures(pictures);
 
-      renderPictures(loadedPictures, 0);
+      renderPictures(gallery._photoArray, 0);
       setActiveFilter(activeFilter);
     };
 
