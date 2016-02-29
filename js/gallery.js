@@ -22,6 +22,7 @@
    *Gallery get pictures
   */
   Gallery.prototype.setPictures = function(pictures) {
+    this._photoArray.length = 0;
     for (var i = 0; i < pictures.length; i++) {
       this._photoArray = this._photoArray.concat(pictures[i]);
     }
@@ -59,22 +60,44 @@
     document.removeEventListener('keydown', this._onDocumentKeyDown);
   };
 
+  Gallery.prototype.nextPhoto = function(index) {
+    if (!this._photoArray[index + 1]) {
+      return;
+    }
+    var a = 'failed';
+    var b = 'mp4';
+    if (this._photoArray[index + 1].url.contains(a) || this._photoArray[index + 1].url.contains(b)) {
+      this.nextPhoto(index + 1);
+      return;
+    }
+    this.setCurrentPicture(index + 1);
+  };
+
+  Gallery.prototype.prevPhoto = function(index) {
+    if (!this._photoArray[index - 1]) {
+      return;
+    }
+    var a = 'failed';
+    var b = 'mp4';
+    if (this._photoArray[index - 1].url.contains(a) || this._photoArray[index - 1].url.contains(b)) {
+      this.prevPhoto(index - 1);
+      return;
+    }
+    this.setCurrentPicture(index - 1);
+  };
+
   Gallery.prototype._onPhotoClick = function(event) {
     event.preventDefault();
-    if (this._photoArray[this._index + 1].url === 'failed.jpg') {
-      this.setCurrentPicture(this._index + 2);
-    } else {
-      this.setCurrentPicture(this._index + 1);
-    }
+    this.nextPhoto(this._index);
   };
 
   Gallery.prototype._onDocumentKeyDown = function(event) {
     event.preventDefault();
     if (event.keyCode === 39) {
-      this.setCurrentPicture(this._index + 1);
+      this.nextPhoto(this._index);
     }
     if (event.keyCode === 37) {
-      this.setCurrentPicture(this._index - 1);
+      this.prevPhoto(this._index);
     }
     if (event.keyCode === 27) {
       this.hide();
