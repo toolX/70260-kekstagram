@@ -52,9 +52,7 @@
     this.element.removeEventListener('click', this._onClick);
   };
 
-  /**
-   * @type {?Function}
-   */
+
   Photo.prototype._onClick = function(event) {
     event.preventDefault();
     if (!event.target.classList.contains('picture-load-failure')) {
