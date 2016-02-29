@@ -41,7 +41,6 @@
 
   function renderPictures(picturesToRender, pageNumber, replace) {
     if (replace) {
-      gallery._photoArray.length = [];
 
       var el;
       while ((el = renderedElements.shift())) {
@@ -69,7 +68,6 @@
 
       return photoElement;
     }));
-    gallery.setPictures(filteredPictures);
 
     container.appendChild(fragment);
   }
@@ -98,6 +96,7 @@
         });
         break;
     }
+    gallery.setPictures(filteredPictures);
     renderPictures(filteredPictures, 0, true);
     currentPage = 0;
   }
@@ -114,9 +113,8 @@
       var rawData = event.target.response;
       var loadedPictures = JSON.parse(rawData);
       pictures = loadedPictures;
-      gallery.setPictures(pictures);
 
-      renderPictures(gallery._photoArray, 0);
+      renderPictures(pictures, 0);
       setActiveFilter(activeFilter);
     };
 
